@@ -15,6 +15,18 @@ describe("generic", () => {
         }
     }
 
+    class Entry<K,V>{
+        constructor(public key:K, public value:V){
+
+        }
+    }
+
+    class Triple<J,K,T>{
+        constructor(public first:J, public second:K, public third:T){
+            
+        }
+    }
+
     it("should support multiple data type", async() => {
         const dataNumber=new GenericData<number>(123)
         dataNumber.value=100;
@@ -35,5 +47,16 @@ describe("generic", () => {
     it("should support function generic", async() => {
         const result:string=create<string>("Fajar");
         expect(result).toBe("Fajar");
+    });
+
+    it("should support multiple generic type", async() => {
+        const entry=new Entry<number, string>(1,"Hello");
+        expect(entry.key).toBe(1);
+        expect(entry.value).toBe("Hello");
+        
+        const triple=new Triple<number, string, boolean>(1,"Hello", true);
+        expect(triple.first).toBe(1);
+        expect(triple.second).toBe("Hello");
+        expect(triple.third).toBe(true);
     });
 })
