@@ -59,4 +59,10 @@ describe("generic", () => {
         expect(triple.second).toBe("Hello");
         expect(triple.third).toBe(true);
     });
+
+    it("should support optional generic type", async() => {
+        const entry=new Entry(1, "Hello");
+        expect(entry.key).toBe(1);
+        expect(entry.value).toBe("Hello");
+    });
 })
