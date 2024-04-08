@@ -150,4 +150,56 @@ describe("generic", () => {
         // Akan error karena string bukan dari bagian generic constraint
         // const data4=new EmployeeData<string>("Fajar");
     });
+
+    it("should support array", async() => {
+        const array=new Array<string>();
+        array.push("Rama");
+        array.push("Fajar");
+
+        expect(array[0]).toBe("Rama");
+        expect(array[1]).toBe("Fajar");
+    });
+
+    it("should support set", async() => {
+        const set=new Set<string>();
+        set.add("Rama");
+        set.add("Fajar");
+        set.add("Fajar");
+
+        expect(set.size).toBe(2);
+        expect(set.has("Rama")).toBe(true);
+        expect(set.has("Fajar")).toBe(true);
+    });
+
+    it("should support map", async() => {
+        const map=new Map<string, number>();
+        map.set("Rama", 100);
+        map.set("Fajar", 96);
+
+        expect(map.get("Rama")).toBe(100);
+        expect(map.get("Fajar")).toBe(96);
+    });
+
+    async function fetchData(value:string):Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            setTimeout(() => {
+                if(value == "fajar"){
+                    resolve(`Halo ${value}`);
+                }else{
+                    reject("Salah");
+                }
+            });
+        });
+    }
+
+    it("should support promise", async () => {
+        const result=await fetchData("Fajar");
+        expect(result.toUpperCase()).toBe("HALO FAJAR");
+
+        try{
+            await fetchData("fajar");
+        }catch(e){
+            expect(e).toBe("Salah");
+        }
+    });
 })
