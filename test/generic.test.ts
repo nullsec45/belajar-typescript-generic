@@ -27,6 +27,30 @@ describe("generic", () => {
         }
     }
 
+    class SimpleGeneric<T>{
+        private value?:T;
+
+        setValue(value:T){
+            this.value=value;
+        }
+
+        getValue():T | undefined{
+            return this.value;
+        }
+    }
+
+    class GenericDefault<T=string>{
+        private value?:T;
+
+        setValue(value:T){
+            this.value=value;
+        }
+
+        getValue():T | undefined{
+            return this.value;
+        }
+    }
+
     it("should support multiple data type", async() => {
         const dataNumber=new GenericData<number>(123)
         dataNumber.value=100;
@@ -64,5 +88,66 @@ describe("generic", () => {
         const entry=new Entry(1, "Hello");
         expect(entry.key).toBe(1);
         expect(entry.value).toBe("Hello");
+    });
+
+    // Jika tidak menggunakan constructor, maka definisikan tipe datanya pada function
+    it("should support simple generic", async() => {
+        const simple=new SimpleGeneric<string>();
+        simple.setValue("Fajar");
+        // simple.setValue(100);
+        // simple.setValue(true);
+
+        expect(simple.getValue()!.toUpperCase()).toBe("FAJAR");
+    });
+
+    it("should support generic default", async() => {
+        const simple=new GenericDefault();
+        simple.setValue("Fajar");
+        // simple.setValue(100);
+        // simple.setValue(true);
+
+        expect(simple.getValue()!.toUpperCase()).toBe("FAJAR");
+    });
+
+    interface Employee{
+        id:string;
+        name:string;
+    }
+
+    interface Manager extends Employee{
+        totalEmployee:number;
+    }
+
+    interface VP extends Manager{
+        totalManager:number;
+    }
+
+    class EmployeeData<T extends Employee>{
+        constructor(public employee:T){
+
+        }
+    }
+
+    it("should support generic constraint", async () => {
+        const data1=new EmployeeData<Employee>({
+            id:"100",
+            name:"Rama"
+        });
+
+        const data2=new EmployeeData<Manager>({
+            id:"100",
+            name:"Fajar",
+            totalEmployee:100
+        });
+
+        const data3=new EmployeeData<VP>({
+            id:"100",
+            name:"Fadhillah",
+            totalEmployee:100,
+            totalManager:20
+        });
+
+        // Akan error karena string bukan dari bagian generic constraint
+        // const data4=new EmployeeData<string>("Fajar");
     });
 })
